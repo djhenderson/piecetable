@@ -21,6 +21,8 @@ stuff`
 	table.Insert("piece table ", 0, 11)
 	table.Undo()
 	table.Redo()
+
+	// no redo history.
 	table.Redo()
 
 	fmt.Println(table.String())

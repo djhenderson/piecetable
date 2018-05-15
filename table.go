@@ -48,6 +48,10 @@ func (p *PieceTable) Redo() {
 }
 
 func (p *PieceTable) Undo() {
+	if len(p.nodes) == 0 {
+		return
+	}
+
 	nodeIndex := len(p.nodes) - 1
 
 	// get the value we pop

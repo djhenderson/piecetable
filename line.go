@@ -2,18 +2,21 @@ package piecetable
 
 type Line struct {
 	Buffer string
-	nodes  []*PieceNode
+	parent *PieceTable
+	mods   map[int]bool
 }
 
 func (l *Line) AppendNode(node *PieceNode) {
-	l.nodes = append(l.nodes, node)
+	l.mods[len(l.parent.nodes)] = true
+	l.parent.nodes = append(l.parent.nodes, node)
 }
 
 func (l *Line) String() string {
 	data := l.Buffer
 
-	for _, mods := range l.nodes {
-		data = data[:mods.Start] + mods.Data + data[mods.Start:]
+	for index, _ := range l.mods {
+		mod := l.parent.nodes[index]
+		data = data[:mod.Start] + mod.Data + data[mod.Start:]
 	}
 
 	return data

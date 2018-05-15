@@ -6,23 +6,64 @@ import (
 )
 
 type PieceTable struct {
-	Lines []*Line
+	Lines    []*Line
+	nodes    []*PieceNode
+	redoList []*PieceNode
 }
 
 func MakePieceTable(data string) *PieceTable {
 	readStrings := strings.Split(data, "\n")
 
 	lines := make([]*Line, len(readStrings))
+	table := &PieceTable{
+		lines,
+		[]*PieceNode{},
+		[]*PieceNode{},
+	}
+
 	for idx, data := range readStrings {
 		lines[idx] = &Line{
 			data,
-			[]*PieceNode{},
+			table,
+			map[int]bool{},
 		}
 	}
 
-	return &PieceTable{
-		lines,
+	return table
+}
+
+func (p *PieceTable) Redo() {
+	if len(p.redoList) == 0 {
+		return
 	}
+
+	action := p.redoList[len(p.redoList)-1]
+	p.redoList = p.redoList[:len(p.redoList)-1]
+
+	actionIndex := len(p.nodes)
+	p.nodes = append(p.nodes, action)
+
+	line := p.Lines[action.Index]
+	line.mods[actionIndex] = true
+}
+
+func (p *PieceTable) Undo() {
+	nodeIndex := len(p.nodes) - 1
+
+	// get the value we pop
+	change := p.nodes[nodeIndex]
+
+	// remove the node index from
+	// the mods (i.e. a dangling
+	// pointer)
+	line := p.Lines[change.Index]
+	delete(line.mods, nodeIndex)
+
+	// pop the most recent change
+	p.nodes = p.nodes[:nodeIndex]
+
+	// append it so we can redo it later if necessary
+	p.redoList = append(p.redoList, change)
 }
 
 func (p *PieceTable) Insert(val string, line int, idx int) {

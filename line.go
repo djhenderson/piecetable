@@ -26,10 +26,6 @@ func (l *Line) Split(idx int) string {
 	return rightPart
 }
 
-func (l *Line) Substr(idx, length int) string {
-	return l.Buffer[idx : idx+length]
-}
-
 func (l *Line) Len() int {
 	return len(l.String())
 }

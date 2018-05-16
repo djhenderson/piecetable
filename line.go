@@ -16,7 +16,11 @@ func (l *Line) String() string {
 
 	for index, _ := range l.mods {
 		mod := l.parent.nodes[index]
-		data = data[:mod.Start] + mod.Data + data[mod.Start:]
+		if mod.Length > 0 {
+			data = data[:mod.Start] + mod.Data + data[mod.Start:]
+		} else {
+			data = data[:mod.Start-1] + data[mod.Start:]
+		}
 	}
 
 	return data

@@ -7,6 +7,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDeleteSingle(t *testing.T) {
+	text := `this is my testing
+document i want to see how it fares
+and all of that fun
+stuff`
+	output := `my testing
+document i want to see how it fares
+and all of that fun
+stuff`
+
+	table := MakePieceTable(text)
+
+	for i := 0; i < len("this is "); i++ {
+		table.Delete(0, 1)
+	}
+
+	fmt.Println(table.String())
+
+	assert.Equal(t, output, table.String())
+}
+
 func TestBadRedo(t *testing.T) {
 	text := `this is my testing
 document i want to see how it fares

@@ -70,6 +70,12 @@ func (p *PieceTable) Undo() {
 	p.redoList = append(p.redoList, change)
 }
 
+func (p *PieceTable) Delete(line int, idx int) {
+	node := NewPiece("", line, idx)
+	node.Length = -1
+	p.Lines[line].AppendNode(node)
+}
+
 func (p *PieceTable) Insert(val string, line int, idx int) {
 	node := NewPiece(val, line, idx)
 	p.Lines[line].AppendNode(node)

@@ -3,6 +3,7 @@ package piecetable
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 type PieceTable struct {
@@ -74,6 +75,12 @@ func (p *PieceTable) Delete(line int, idx int) {
 	node := NewPiece("", line, idx)
 	node.Length = -1
 	p.Lines[line].AppendNode(node)
+}
+
+// TODO this builds the line and indexes it.
+func (p *PieceTable) Index(line int, idx int) rune {
+	r, _ := utf8.DecodeLastRuneInString(p.Lines[line].String()[idx:])
+	return r
 }
 
 func (p *PieceTable) Insert(val string, line int, idx int) {

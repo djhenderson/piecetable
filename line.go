@@ -20,12 +20,6 @@ func (l *Line) AppendNode(node *PieceNode) {
 	l.parent.nodes = append(l.parent.nodes, node)
 }
 
-func (l *Line) Split(idx int) string {
-	rightPart := l.Buffer[idx:]
-	l.Buffer = l.Buffer[:idx]
-	return rightPart
-}
-
 func (l *Line) Len() int {
 	return len(l.String())
 }

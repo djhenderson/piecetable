@@ -45,8 +45,7 @@ func (l *Line) String() string {
 			}
 
 			fst, end := data[:mod.Start], data[mod.Start:]
-			initial := data
-			data = fst + initial + end
+			data = fst + mod.Data + end
 		} else {
 			data = data[:mod.Start-1] + data[mod.Start:]
 		}

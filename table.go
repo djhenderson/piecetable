@@ -23,11 +23,7 @@ func MakePieceTable(data string) *PieceTable {
 	}
 
 	for idx, data := range readStrings {
-		lines[idx] = &Line{
-			data,
-			table,
-			map[int]bool{},
-		}
+		lines[idx] = NewLine(data, table)
 	}
 
 	return table

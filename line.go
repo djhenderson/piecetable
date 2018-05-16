@@ -4,16 +4,19 @@ type Line struct {
 	Buffer string
 	parent *PieceTable
 	mods   map[int]bool
+	keys   []int
 }
 
 func NewLine(data string, parent *PieceTable) *Line {
 	return &Line{
-		data, parent, map[int]bool{},
+		data, parent, map[int]bool{}, []int{},
 	}
 }
 
 func (l *Line) AppendNode(node *PieceNode) {
-	l.mods[len(l.parent.nodes)] = true
+	nodeIndex := len(l.parent.nodes)
+	l.mods[nodeIndex] = true
+	l.keys = append(l.keys, nodeIndex)
 	l.parent.nodes = append(l.parent.nodes, node)
 }
 
@@ -34,15 +37,26 @@ func (l *Line) Len() int {
 func (l *Line) String() string {
 	data := l.Buffer
 
-	for index, val := range l.mods {
-		if !val {
+	for _, keyName := range l.keys {
+		thing, ok := l.mods[keyName]
+		// ?
+		if !ok || !thing {
 			continue
 		}
 
-		mod := l.parent.nodes[index]
+		mod := l.parent.nodes[keyName]
 
-		if mod.Length > 0 {
-			data = data[:mod.Start] + mod.Data + data[mod.Start:]
+		if mod.Length >= 0 {
+
+			// append!
+			if mod.Start >= len(data) {
+				data += mod.Data
+				continue
+			}
+
+			fst, end := data[:mod.Start], data[mod.Start:]
+			initial := data
+			data = fst + initial + end
 		} else {
 			data = data[:mod.Start-1] + data[mod.Start:]
 		}

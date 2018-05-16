@@ -12,7 +12,7 @@ func TestDeleteSingle(t *testing.T) {
 document i want to see how it fares
 and all of that fun
 stuff`
-	output := `my testing
+	output := ` my testing
 document i want to see how it fares
 and all of that fun
 stuff`
@@ -22,6 +22,7 @@ stuff`
 	for i := 0; i < len("this is "); i++ {
 		table.Delete(0, 1)
 	}
+	table.Undo()
 
 	fmt.Println(table.String())
 
